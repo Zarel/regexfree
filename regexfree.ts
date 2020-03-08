@@ -18,7 +18,16 @@ function convert() {
   const options = 'x' + (nFlag ? 'n' : '');
 
   const input = inputBox.value;
-  let output = XRegExp(input, options).toString();
+  let output;
+  try {
+    output = XRegExp(input, options).toString();
+  } catch (e) {
+    output = (e as Error).message;
+    outputBox.value = output;
+    outputBox.className = 'error';
+    autosize(outputBox);
+    return;
+  }
   if (!input) {
     output = '';
   } else if (output === '/(?:)/') {
@@ -47,6 +56,7 @@ function convert() {
 
     if (stringOut) output = '"' + output.slice(1, -1).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
   }
+  outputBox.className = '';
   outputBox.value = output;
   autosize(outputBox);
 }
