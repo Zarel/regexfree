@@ -31,6 +31,10 @@ inputBox.oninput = () => {
   autosize(inputBox);
   convert();
 };
+inputBox.onchange = () => {
+  autosize(inputBox);
+  convert();
+};
 nFlagCheckbox.onchange = () => {
   convert();
 };

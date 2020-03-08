@@ -7568,7 +7568,7 @@ var literalOutRadio = document.getElementById('literalout');
 var stringOutRadio = document.getElementById('stringout');
 function autosize(textbox) {
     textbox.style.height = "50px";
-    var newHeight = Math.max(textbox.scrollHeight + 4, 50);
+    var newHeight = Math.max(textbox.scrollHeight, 50);
     textbox.style.height = newHeight + "px";
 }
 function convert() {
@@ -7587,6 +7587,10 @@ function convert() {
     autosize(outputBox);
 }
 inputBox.oninput = function () {
+    autosize(inputBox);
+    convert();
+};
+inputBox.onchange = function () {
     autosize(inputBox);
     convert();
 };
