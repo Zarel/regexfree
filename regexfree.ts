@@ -34,6 +34,13 @@ function convert() {
         /[0-9]/.test(before) && /[0-9]/.test(after) ? match : before + after
       )
     );
+    // do the replacement twice so single characters surrounded by spaces are prettified on both sides
+    output = output.replace(
+      /(.)\(\?\:\)(.)/g,
+      (match, before, after) => (
+        /[0-9]/.test(before) && /[0-9]/.test(after) ? match : before + after
+      )
+    );
 
     // spaces no longer need to be escaped
     output = output.replace(/\\ /g, ' ');

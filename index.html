@@ -380,6 +380,8 @@ function convert() {
         // make output prettier by removing it between anything else
         // there are several false negatives here, but they don't actually matter
         output = output.replace(/(.)\(\?\:\)(.)/g, function (match, before, after) { return (/[0-9]/.test(before) && /[0-9]/.test(after) ? match : before + after); });
+        // do the replacement twice so single characters surrounded by spaces are prettified on both sides
+        output = output.replace(/(.)\(\?\:\)(.)/g, function (match, before, after) { return (/[0-9]/.test(before) && /[0-9]/.test(after) ? match : before + after); });
         // spaces no longer need to be escaped
         output = output.replace(/\\ /g, ' ');
         if (stringOut)
