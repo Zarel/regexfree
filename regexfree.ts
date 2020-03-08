@@ -18,22 +18,28 @@ function convert() {
   const options = 'x' + (nFlag ? 'n' : '');
 
   const input = inputBox.value;
-  let output = input === '' ? '' : XRegExp(input, options).toString();
+  let output = XRegExp(input, options).toString();
+  if (!input) {
+    output = '';
+  } else if (output === '/(?:)/') {
+    output = stringOut ? '""' : '/(?:)/';
+  } else {
+    // XRegExp is too conservative about adding (?:)
+    // it's only needed between digits
+    // make output prettier by removing it between anything else
+    // there are several false negatives here, but they don't actually matter
+    output = output.replace(
+      /(.)\(\?\:\)(.)/g,
+      (match, before, after) => (
+        /[0-9]/.test(before) && /[0-9]/.test(after) ? match : before + after
+      )
+    );
 
-  // XRegExp is too conservative about adding (?:)
-  // it's only needed between digits
-  // make output prettier by removing it between anything else
-  // there are several false negatives here, but they don't actually matter
-  output = output.replace(
-    /(.)\(\?\:\)(.)/g,
-    (match, before, after) => (
-      /[0-9]/.test(before) && /[0-9]/.test(after) ? match : before + after
-    )
-  );
+    // spaces no longer need to be escaped
+    output = output.replace(/\\ /g, ' ');
 
-  output = output.replace(/\\ /g, ' '); // spaces no longer need to be escaped
-  if (stringOut) output = '"' + output.slice(1, -1).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
-  else if (output === '//') output = '/(?:)/';
+    if (stringOut) output = '"' + output.slice(1, -1).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+  }
   outputBox.value = output;
   autosize(outputBox);
 }
