@@ -8,7 +8,7 @@ const stringOutRadio = document.getElementById('stringout') as HTMLInputElement;
 
 function autosize(textbox: HTMLTextAreaElement) {
   textbox.style.height = `50px`;
-  const newHeight = Math.max(textbox.scrollHeight, 50);
+  const newHeight = Math.max(textbox.scrollHeight + 4, 50);
   textbox.style.height = `${newHeight}px`;
 }
 
