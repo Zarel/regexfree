@@ -8,7 +8,7 @@ html, body {
 	margin: 0;
 	padding: 0;
 }
-html, button {
+html {
 	font: 15pt sans-serif;
 	color: black;
 	background: #DDD;
@@ -47,7 +47,7 @@ input[type=checkbox], input[type=radio] {
 .form p {
   margin: 0.4em 0;
 }
-.body p {
+.body {
   text-align: left;
 }
 h1 {
@@ -57,35 +57,75 @@ code {
   border: 1px solid #888;
   border-radius: 3px;
   padding: 0 2px;
+  background: #EEE;
   color: #333;
 }
+.hl { display: block; font-size: 12pt; }
+.hl .comment { background: none; color: #888; font-style: italic; }
+.hl .paren1 { background: #b3f172; color: #48543b; }
+.hl .paren2 { background: #b4c76e; color: #414c17; }
+.hl .literal { background: #aaa; color: #282828; }
+.hl .quantifier { background: #89b6ff; color: #263142; }
+.hl .lookahead { background: #d6ae4f; color: #4e3c11; }
+.hl .set-content { background: #ffc080; color: #753e07; }
+.hl .set-token { background: #e0a060; color: #753e07; }
 </style>
 
 <div class="outer"><div class="main">
   <h1>[regexfree]</h1>
-  <div class="form">
-    <textarea id="input" autofocus></textarea>
+  <div class="body">
+    <p>
+      <a href="https://regex101.com/?flags=gmx" target="_blank">Write a free-space regular expression in Regex101</a>, paste it in the top box, and the bottom box will compile it. You can put the compiled regex in your code, and put the free-space source in your comments.
+    </p>
+  </div>
+  <textarea id="input" autofocus></textarea>
+  <div class="options">
     ⬇️
     <p>
-      <label><input type="checkbox" id="nflag" checked /> <code>n</code> – Explicit capture (Convert <code>(</code> to <code>(?:</code>)</label>
+      <label><input type="checkbox" id="nflag" checked /> Convert <code>(</code> to <code>(?:</code></label>
     </p>
     <p>
       <label><input type="radio" name="outtype" value="literal" id="literalout" checked /> <code>/regex/</code></label>
       <label><input type="radio" name="outtype" value="string" id="stringout" /> <code>"regex"</code></label>
     </p>
     ⬇️
-    <textarea id="output" readonly placeholder="(output)"></textarea>
   </div>
+  <textarea id="output" readonly placeholder="(output)"></textarea>
   <div class="body">
-    <h2><a href="https://regex101.com/?flags=gmx" target="_blank">write readable regexes</a>, then compile them to JavaScript</h2>
+    <h2>What's this?</h2>
     <p>
-      A free-space regular expression is a regex that ignores whitespace, so you can line-break and indent it however you want. To actually search for a space, use <code>\&nbsp;</code>. You can also add comments starting with <code>#</code>.
+      This tool lets you write regexes that look like this:
+    </p>
+    <p><code class="hl">
+      <span class="paren1">(</span><br />
+      &nbsp; <span class="comment"># When using http://, allow any domain</span><br />
+      &nbsp; https<span class="quantifier">?</span>:<span class="literal">\/\/</span> <span class="set-bracket set-token">[</span><span class="set-content">a</span><span class="set-token">-</span><span class="set-content">z0</span><span class="set-token">-</span><span class="set-content">9-</span><span class="set-token">]</span><span class="quantifier">+</span> <span class="paren2">(</span> <span class="literal">\.</span> <span class="set-bracket set-token">[</span><span class="set-content">a</span><span class="set-token">-</span><span class="set-content">z0</span><span class="set-token">-</span><span class="set-content">9-</span><span class="set-token">]</span><span class="quantifier">+</span> <span class="paren2">)*</span><br />
+      <span class="paren1">|</span><br />
+      &nbsp; <span class="comment"># When using www., expect at least one more dot</span><br />
+      &nbsp; www <span class="literal">\.</span> <span class="set-bracket set-token">[</span><span class="set-content">a</span><span class="set-token">-</span><span class="set-content">z0</span><span class="set-token">-</span><span class="set-content">9-</span><span class="set-token">]</span><span class="quantifier">+</span> <span class="paren2">(</span> <span class="literal">\.</span> <span class="set-bracket set-token">[</span><span class="set-content">a</span><span class="set-token">-</span><span class="set-content">z0</span><span class="set-token">-</span><span class="set-content">9-</span><span class="set-token">]</span><span class="quantifier">+</span> <span class="paren2">)+</span><br />
+      <span class="paren1">|</span><br />
+      &nbsp; <span class="comment"># Otherwise, allow any domain,</span><br />
+      &nbsp; <span class="set-bracket set-token">[</span><span class="set-content">a</span><span class="set-token">-</span><span class="set-content">z0</span><span class="set-token">-</span><span class="set-content">9-</span><span class=bracket set-token">]</span><span class=quantifier _1L8oL">+</span> <span class="paren2">(</span> <span class="literal">\.</span> <span class="set-bracket set-token">[</span><span class="set-content">a</span><span class=content set-token">-</span><span class="set-content">z0</span><span class="set-token">-</span><span class="set-content">9-</span><span class="set-token">]</span><span class="quantifier">+</span> <span class="paren2">)*</span> <span class="literal">\.</span><br />
+      &nbsp; <span class="paren2">(</span><br />
+      &nbsp; &nbsp; <span class="comment"># followed either a common TLD...</span><br />
+      &nbsp; &nbsp;  com<span class="quantifier">?</span> <span class="paren2">|</span> org <span class="paren2">|</span> net <span class="paren2">|</span> edu <span class="paren2">|</span> info <span class="paren2">|</span> us <span class="paren2">|</span> jp<br />
+      &nbsp; <span class="paren2">|</span><br />
+      &nbsp; &nbsp; <span class="comment"># or any 2-3 letter TLD followed by : or /</span><br />
+      &nbsp; &nbsp; <span class="set-bracket set-token">[</span><span class="set-content">a</span><span class="set-token">-</span><span class="set-content">z</span><span class="set-token">]</span><span class="quantifier">{2,3}</span> <span class="lookahead">(?=</span><span class="set-bracket set-token">[</span><span class="set-content">:</span><span class="set-content literal">\/</span><span class="set-token">]</span><span class="lookahead">)</span><br />
+      &nbsp; <span class="paren2">)</span><br />
+      <span class="paren1">)</span><br />
+    </code></p>
+    <p>
+      Instead of this:
+    </p>
+    <p><code class="hl">
+      /(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:\/])))/
+    </code></p>
+    <p>
+      It's called a free-space regular expression: it ignores whitespace, so you can line-break and indent it however you want. To actually search for a space, use <code>\&nbsp;</code>. You can also add comments starting with <code>#</code>.
     </p>
     <p>
-      Paste a free-space regular expression in the top box, and the bottom box will compile it into JavaScript. You can put the compiled regex in your code, and put the free-space source in your comments.
-    </p>
-    <p>
-      This lets you use <a href="https://github.com/slevithan/xregexp" target="_blank">XRegExp</a> without actually pulling it into a dependency.
+      This lets you use <a href="https://github.com/slevithan/xregexp" target="_blank">XRegExp</a> without actually adding it as a dependency.
     </p>
     <p>
       <small><a href="https://github.com/Zarel/regexfree" target="_blank">(GitHub)</a></small>
