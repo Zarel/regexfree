@@ -1,0 +1,11 @@
+{
+  "include": ["regexfree.ts"],
+  "compilerOptions": {
+    "target": "es5",
+    "module": "none",
+    "lib": ["esnext", "dom"],
+    "strict": true,
+    "sourceMap": true,
+    "esModuleInterop": true
+  }
+}
