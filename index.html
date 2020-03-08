@@ -11,11 +11,11 @@ html, body {
 html, button {
 	font: 15pt sans-serif;
 	color: black;
-	background: #EEE;
+	background: #DDD;
 	text-align: center;
 }
 .outer {
-  padding: 10px;
+  padding: 15px;
 }
 .main {
   max-width: 8in;
@@ -26,7 +26,7 @@ textarea {
 	margin: 10px auto;
 	width: 100%;
 	height: 50px;
-	font-size: 22pt;
+	font-size: 18pt;
 
 	border: 1px solid #AAAAAA;
 	border-radius: 3px;
@@ -37,35 +37,57 @@ textarea {
 	color: black;
   box-sizing: border-box;
 }
-input[type=checkbox] {
-  font-size: 24pt;
-  height: 25px;
-  width: 25px;
+textarea:hover, textarea:focus {
+  border-color: #555;
+}
+input[type=checkbox], input[type=radio] {
+  height: 16px;
+  width: 16px;
+}
+.form p {
+  margin: 0.4em 0;
+}
+.body p {
+  text-align: left;
+}
+h1 {
+  font-size: 12pt;
+}
+code {
+  border: 1px solid #888;
+  border-radius: 3px;
+  padding: 0 2px;
+  color: #333;
 }
 </style>
 
 <div class="outer"><div class="main">
-  <textarea id="input" autofocus></textarea>
-  ⬇️
-  <div>
-    <label><input type="checkbox" id="nflag" checked /> <code>n</code> – Explicit capture (Converts most `(` to `(?:`)</label>
+  <h1>[regexfree]</h1>
+  <div class="form">
+    <textarea id="input" autofocus></textarea>
+    ⬇️
+    <p>
+      <label><input type="checkbox" id="nflag" checked /> <code>n</code> – Explicit capture (Convert <code>(</code> to <code>(?:</code>)</label>
+    </p>
+    <p>
+      <label><input type="radio" name="outtype" value="literal" id="literalout" checked /> <code>/regex/</code></label>
+      <label><input type="radio" name="outtype" value="string" id="stringout" /> <code>"regex"</code></label>
+    </p>
+    ⬇️
+    <textarea id="output" readonly placeholder="(output)"></textarea>
   </div>
-  <div>
-    <label><input type="radio" name="outtype" value="literal" id="literalout" checked /> <code>/regex/</code></label>
-    <label><input type="radio" name="outtype" value="string" id="stringout" /> <code>"regex"</code></label>
+  <div class="body">
+    <h2><a href="https://regex101.com/?flags=x" target="_blank">write readable regexes</a>, then compile them to JavaScript</h2>
+    <p>
+      A free-space regular expression is a regex that ignores whitespace, so you can line-break and indent it however you want. To actually search for a space, use <code>\&nbsp;</code>. You can also add comments starting with <code>#</code>.
+    </p>
+    <p>
+      Paste a free-space regular expression in the top box, and the bottom box will compile it into JavaScript. You can the compiled regex in your code, and put the free-space source in your comments.
+    </p>
+    <p>
+      This lets you use <a href="https://github.com/slevithan/xregexp" target="_blank">XRegExp</a> without actually pulling it into a dependency.
+    </p>
   </div>
-  ⬇️
-  <textarea id="output" readonly></textarea>
-  <h1>regexfree</h1>
-  <p>
-    This tool lets you convert free-space regular expressions into JavaScript-compatible regular expressions.
-  </p>
-  <p>
-    The idea is to let you use <a href="https://github.com/slevithan/xregexp" target="_blank">XRegExp</a> without actually needing it as a dependency. Instead, just use the compiled regex in your code, and put the source in your comments.
-  </p>
-  <p>
-    You probably want to <a href="https://regex101.com/?flags=x" target="_blank">develop your regex at Regex101</a>.
-  </p>
 </div></div>
 <script>
 'use strict';
@@ -7546,7 +7568,7 @@ var literalOutRadio = document.getElementById('literalout');
 var stringOutRadio = document.getElementById('stringout');
 function autosize(textbox) {
     textbox.style.height = "50px";
-    var newHeight = Math.min(Math.max(textbox.scrollHeight - 2, 16), 600);
+    var newHeight = Math.max(textbox.scrollHeight + 4, 50);
     textbox.style.height = newHeight + "px";
 }
 function convert() {
