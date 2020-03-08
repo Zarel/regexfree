@@ -22,6 +22,7 @@ function convert() {
   output = output.replace(/\(\?\:\)/g, ''); // weird artifact of toString
   output = output.replace(/\\ /g, ' '); // spaces no longer need to be escaped
   if (stringOut) output = '"' + output.slice(1, -1).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+  else if (output === '//') output = '/(?:)/';
   outputBox.value = output;
   autosize(outputBox);
 }
