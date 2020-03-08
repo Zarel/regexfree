@@ -130,7 +130,7 @@ code {
     &nbsp; <span class="comment"># When using www., expect at least one more dot</span><br />
     &nbsp; www <span class="literal">\.</span> <span class="set-bracket set-token">[</span><span class="set-content">a</span><span class="set-token">-</span><span class="set-content">z0</span><span class="set-token">-</span><span class="set-content">9-</span><span class="set-token">]</span><span class="quantifier">+</span> <span class="paren2">(</span> <span class="literal">\.</span> <span class="set-bracket set-token">[</span><span class="set-content">a</span><span class="set-token">-</span><span class="set-content">z0</span><span class="set-token">-</span><span class="set-content">9-</span><span class="set-token">]</span><span class="quantifier">+</span> <span class="paren2">)+</span><br />
     <span class="paren1">|</span><br />
-    &nbsp; <span class="comment"># Otherwise, allow any domain,</span><br />
+    &nbsp; <span class="comment"># Otherwise, allow any domain, but only if</span><br />
     &nbsp; <span class="set-bracket set-token">[</span><span class="set-content">a</span><span class="set-token">-</span><span class="set-content">z0</span><span class="set-token">-</span><span class="set-content">9-</span><span class=bracket set-token">]</span><span class=quantifier _1L8oL">+</span> <span class="paren2">(</span> <span class="literal">\.</span> <span class="set-bracket set-token">[</span><span class="set-content">a</span><span class=content set-token">-</span><span class="set-content">z0</span><span class="set-token">-</span><span class="set-content">9-</span><span class="set-token">]</span><span class="quantifier">+</span> <span class="paren2">)*</span> <span class="literal">\.</span><br />
     &nbsp; <span class="paren2">(</span><br />
     &nbsp; &nbsp; <span class="comment"># followed either a common TLD...</span><br />
@@ -151,7 +151,7 @@ code {
     It's called a free-space regular expression: it ignores whitespace, so you can line-break and indent it however you want. To actually search for a space, use <code>\&nbsp;</code>. You can also add comments starting with <code>#</code>.
   </p>
   <p>
-    This lets you use <a href="https://github.com/slevithan/xregexp" target="_blank">XRegExp</a> without actually adding it as a dependency.
+    This lets you use <a href="https://github.com/slevithan/xregexp" target="_blank">XRegExp</a> without the performance impact.
   </p>
   <p>
     <small><a href="https://github.com/Zarel/regexfree" target="_blank">(GitHub)</a></small>
@@ -460,8 +460,9 @@ function convert() {
         output = output.replace(/(.)\(\?\:\)(.)/g, function (match, before, after) { return (/[0-9]/.test(before) && /[0-9]/.test(after) ? match : before + after); });
         // spaces no longer need to be escaped
         output = output.replace(/\\ /g, ' ');
-        if (stringOut)
-            output = '"' + output.slice(1, -1).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+        if (stringOut) {
+            output = '"' + (output.slice(1, output.lastIndexOf('/')).replace(/\\/g, '\\\\').replace(/"/g, '\\"')) + '"';
+        }
     }
     outputBox.className = '';
     outputBox.value = output;

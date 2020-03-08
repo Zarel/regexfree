@@ -54,7 +54,11 @@ function convert() {
     // spaces no longer need to be escaped
     output = output.replace(/\\ /g, ' ');
 
-    if (stringOut) output = '"' + output.slice(1, -1).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+    if (stringOut) {
+      output = '"' + (
+        output.slice(1, output.lastIndexOf('/')).replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+      ) + '"';
+    }
   }
   outputBox.className = '';
   outputBox.value = output;
