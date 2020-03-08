@@ -77,7 +77,7 @@ code {
     <textarea id="output" readonly placeholder="(output)"></textarea>
   </div>
   <div class="body">
-    <h2><a href="https://regex101.com/?flags=x" target="_blank">write readable regexes</a>, then compile them to JavaScript</h2>
+    <h2><a href="https://regex101.com/?flags=gmx" target="_blank">write readable regexes</a>, then compile them to JavaScript</h2>
     <p>
       A free-space regular expression is a regex that ignores whitespace, so you can line-break and indent it however you want. To actually search for a space, use <code>\&nbsp;</code>. You can also add comments starting with <code>#</code>.
     </p>
@@ -348,7 +348,55 @@ astral:"\ud801[\udc50-\udc7f]"},{name:"Siddham",astral:"\ud805[\udd80-\uddb5\udd
 {name:"Sundanese",bmp:"\u1b80-\u1bbf\u1cc0-\u1cc7"},{name:"Syloti_Nagri",bmp:"\ua800-\ua82b"},{name:"Syriac",bmp:"\u0700-\u070d\u070f-\u074a\u074d-\u074f\u0860-\u086a"},{name:"Tagalog",bmp:"\u1700-\u170c\u170e-\u1714"},{name:"Tagbanwa",bmp:"\u1760-\u176c\u176e-\u1770\u1772\u1773"},{name:"Tai_Le",bmp:"\u1950-\u196d\u1970-\u1974"},{name:"Tai_Tham",bmp:"\u1a20-\u1a5e\u1a60-\u1a7c\u1a7f-\u1a89\u1a90-\u1a99\u1aa0-\u1aad"},{name:"Tai_Viet",bmp:"\uaa80-\uaac2\uaadb-\uaadf"},{name:"Takri",astral:"\ud805[\ude80-\udeb8\udec0-\udec9]"},
 {name:"Tamil",bmp:"\u0b82\u0b83\u0b85-\u0b8a\u0b8e-\u0b90\u0b92-\u0b95\u0b99\u0b9a\u0b9c\u0b9e\u0b9f\u0ba3\u0ba4\u0ba8-\u0baa\u0bae-\u0bb9\u0bbe-\u0bc2\u0bc6-\u0bc8\u0bca-\u0bcd\u0bd0\u0bd7\u0be6-\u0bfa",astral:"\ud807[\udfc0-\udff1\udfff]"},{name:"Tangut",astral:"\ud81b\udfe0|[\ud81c-\ud820][\udc00-\udfff]|\ud821[\udc00-\udff7]|\ud822[\udc00-\udef2]"},{name:"Telugu",bmp:"\u0c00-\u0c0c\u0c0e-\u0c10\u0c12-\u0c28\u0c2a-\u0c39\u0c3d-\u0c44\u0c46-\u0c48\u0c4a-\u0c4d\u0c55\u0c56\u0c58-\u0c5a\u0c60-\u0c63\u0c66-\u0c6f\u0c77-\u0c7f"},
 {name:"Thaana",bmp:"\u0780-\u07b1"},{name:"Thai",bmp:"\u0e01-\u0e3a\u0e40-\u0e5b"},{name:"Tibetan",bmp:"\u0f00-\u0f47\u0f49-\u0f6c\u0f71-\u0f97\u0f99-\u0fbc\u0fbe-\u0fcc\u0fce-\u0fd4\u0fd9\u0fda"},{name:"Tifinagh",bmp:"\u2d30-\u2d67\u2d6f\u2d70\u2d7f"},{name:"Tirhuta",astral:"\ud805[\udc80-\udcc7\udcd0-\udcd9]"},{name:"Ugaritic",astral:"\ud800[\udf80-\udf9d\udf9f]"},{name:"Vai",bmp:"\ua500-\ua62b"},{name:"Wancho",astral:"\ud838[\udec0-\udef9\udeff]"},{name:"Warang_Citi",astral:"\ud806[\udca0-\udcf2\udcff]"},
-{name:"Yi",bmp:"\ua000-\ua48c\ua490-\ua4c6"},{name:"Zanabazar_Square",astral:"\ud806[\ude00-\ude47]"}]},{}]},{},[8])(8)});"use strict";var inputBox=document.getElementById("input"),outputBox=document.getElementById("output"),nFlagCheckbox=document.getElementById("nflag"),literalOutRadio=document.getElementById("literalout"),stringOutRadio=document.getElementById("stringout");function autosize(a){a.style.height="50px";a.style.height=Math.max(a.scrollHeight+4,50)+"px"}
-function convert(){var a=nFlagCheckbox.checked,b=stringOutRadio.checked,c=inputBox.value;a=""===c?"":XRegExp(c,"x"+(a?"n":"")).toString();a=a.replace(/\(\?:\)/g,"");a=a.replace(/\\ /g," ");b?a='"'+a.slice(1,-1).replace(/\\/g,"\\\\").replace(/"/g,'\\"')+'"':"//"===a&&(a="/(?:)/");outputBox.value=a;autosize(outputBox)}inputBox.oninput=function(){autosize(inputBox);convert()};inputBox.onchange=function(){autosize(inputBox);convert()};nFlagCheckbox.onchange=function(){convert()};
-literalOutRadio.onchange=function(){convert()};stringOutRadio.onchange=function(){convert()};convert();
+{name:"Yi",bmp:"\ua000-\ua48c\ua490-\ua4c6"},{name:"Zanabazar_Square",astral:"\ud806[\ude00-\ude47]"}]},{}]},{},[8])(8)});
+</script>
+<script>
+'use strict';
+var inputBox = document.getElementById('input');
+var outputBox = document.getElementById('output');
+var nFlagCheckbox = document.getElementById('nflag');
+var literalOutRadio = document.getElementById('literalout');
+var stringOutRadio = document.getElementById('stringout');
+function autosize(textbox) {
+    textbox.style.height = "50px";
+    var newHeight = Math.max(textbox.scrollHeight + 4, 50);
+    textbox.style.height = newHeight + "px";
+}
+function convert() {
+    var nFlag = nFlagCheckbox.checked;
+    var stringOut = stringOutRadio.checked;
+    var options = 'x' + (nFlag ? 'n' : '');
+    var input = inputBox.value;
+    var output = input === '' ? '' : XRegExp(input, options).toString();
+    // XRegExp is too conservative about adding (?:)
+    // it's only needed between digits
+    // make output prettier by removing it between anything else
+    // there are several false negatives here, but they don't actually matter
+    output = output.replace(/(.)\(\?\:\)(.)/g, function (match, before, after) { return (/[0-9]/.test(before) && /[0-9]/.test(after) ? match : before + after); });
+    output = output.replace(/\\ /g, ' '); // spaces no longer need to be escaped
+    if (stringOut)
+        output = '"' + output.slice(1, -1).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
+    else if (output === '//')
+        output = '/(?:)/';
+    outputBox.value = output;
+    autosize(outputBox);
+}
+inputBox.oninput = function () {
+    autosize(inputBox);
+    convert();
+};
+inputBox.onchange = function () {
+    autosize(inputBox);
+    convert();
+};
+nFlagCheckbox.onchange = function () {
+    convert();
+};
+literalOutRadio.onchange = function () {
+    convert();
+};
+stringOutRadio.onchange = function () {
+    convert();
+};
+convert();
 </script>

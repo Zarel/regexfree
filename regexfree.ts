@@ -1,4 +1,4 @@
-declare var XRegExp: any;
+declare function XRegExp(regex: string, flags?: string): RegExp;
 
 const inputBox = document.getElementById('input') as HTMLTextAreaElement;
 const outputBox = document.getElementById('output') as HTMLTextAreaElement;
@@ -19,7 +19,18 @@ function convert() {
 
   const input = inputBox.value;
   let output = input === '' ? '' : XRegExp(input, options).toString();
-  output = output.replace(/\(\?\:\)/g, ''); // weird artifact of toString
+
+  // XRegExp is too conservative about adding (?:)
+  // it's only needed between digits
+  // make output prettier by removing it between anything else
+  // there are several false negatives here, but they don't actually matter
+  output = output.replace(
+    /(.)\(\?\:\)(.)/g,
+    (match, before, after) => (
+      /[0-9]/.test(before) && /[0-9]/.test(after) ? match : before + after
+    )
+  );
+
   output = output.replace(/\\ /g, ' '); // spaces no longer need to be escaped
   if (stringOut) output = '"' + output.slice(1, -1).replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"';
   else if (output === '//') output = '/(?:)/';

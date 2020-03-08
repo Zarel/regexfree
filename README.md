@@ -7,7 +7,7 @@ https://zarel.github.io/regexfree/
     npm i
     npx tsc regexfree.ts
 
-Copy/paste the contents of `xregexp-app.js` and `regexfree.js` into a minifier or something, then put the results in the `<script>...</script>` tags in `index.html`.
+Copy/paste the contents of `regexfree.js` into the second `<script>...</script>` tags in `index.html`.
 
 > Why isn't there a build script?
 
