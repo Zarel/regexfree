@@ -37,22 +37,26 @@ function convert() {
     // it's only needed between digits
     // make output prettier by removing it between anything else
     // there are several false negatives here, but they don't actually matter
-    output = output.replace(
-      /(.)\(\?\:\)(.)/g,
-      (match, before, after) => (
-        /[0-9]/.test(before) && /[0-9]/.test(after) ? match : before + after
-      )
-    );
-    // do the replacement twice so single characters surrounded by spaces are prettified on both sides
-    output = output.replace(
-      /(.)\(\?\:\)(.)/g,
-      (match, before, after) => (
-        /[0-9]/.test(before) && /[0-9]/.test(after) ? match : before + after
-      )
-    );
+    output = output.replace(/\(\?\:\)([^0-9])/g, '$1').replace(/([^0-9])\(\?\:\)/g, '$1');
 
     // spaces no longer need to be escaped
     output = output.replace(/\\ /g, ' ');
+
+    // in case your compiled regex needs to pass eslint's `no-useless-escape` rule
+    let inCharClass = false;
+    output = output.replace(
+      /[^\\]|\\./g,
+      token => {
+        if (token === '[') {
+          inCharClass = true;
+        } else if (token === ']') {
+          inCharClass = false;
+        } else if (inCharClass && token.length === 2 && '/.$*+?[{}|()"`\''.indexOf(token.charAt(1)) !== -1) {
+          return token.charAt(1);
+        }
+        return token;
+      }
+    );
 
     if (stringOut) {
       output = '"' + (
