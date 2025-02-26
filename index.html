@@ -154,7 +154,7 @@ code {
     It's called a free-space regular expression: it ignores whitespace, so you can line-break and indent it however you want. To actually search for a space, use <code>\&nbsp;</code>. You can also add comments starting with <code>#</code>.
   </p>
   <p>
-    This lets you use <a href="https://github.com/slevithan/xregexp" target="_blank">XRegExp</a> without the performance impact.
+    Actually using this kind of regex is complicated. If you want an extra dependency, you could install <a href="https://github.com/slevithan/regex" target="_blank">Regex+</a>, but that's not an option in config files, VS Code's search tool, or whatever else. Instead, you could write your free-space regex in a comment, convert it here, and then put the regular regex in your config file or wherever else!
   </p>
   <p>
     <small><a href="https://github.com/Zarel/regexfree" target="_blank">(GitHub)</a></small>
